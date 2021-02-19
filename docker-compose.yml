@@ -1,0 +1,56 @@
+version: '3.4'
+services:
+    postgres:
+        image: postgres:11-alpine
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        volumes:
+            - ./data/postgres:/var/lib/postgresql/data
+            - ./postgres.sql:/docker-entrypoint-initdb.d/init-db.sql
+        ports:
+            - '5432:5432'
+
+    redis:
+        image: redis:alpine
+
+    proxy:
+        image: nginx:alpine
+        volumes:
+            - ./proxy.nginx.d:/etc/nginx/conf.d
+            - ./data/proxy/cache:/data/nginx/cache
+            - ./data/https/ca:/etc/ca
+            - ./data/https/certs:/etc/ssl/private
+        ports:
+            - '80:80'
+
+    frontend-app:
+        build:
+            context: ./packages/frontend-app
+            dockerfile: Dockerfile
+            target: dev
+        environment:
+            REACT_APP_API_URL: http://localhost:5000
+            REACT_APP_SUBSCRIPTION_API_URL: ws://localhost:5000
+        volumes:
+            - ./data/frontend-app/node_modules:/var/www/app/node_modules
+            - ./packages/frontend-app/public:/var/www/app/public
+            - ./packages/frontend-app/src:/var/www/app/src
+            - ./packages/frontend-app/package.json:/var/www/app/package.json
+            - ./packages/frontend-app/yarn.lock:/var/www/app/yarn.lock
+
+    api:
+        build:
+            context: packages/api-main
+            dockerfile: Dockerfile
+        environment:
+            LOG_REQUESTS: '0'
+            PUBSUB_EMULATOR_HOST: pubsub:8538
+            REDIS_URL: redis://redis
+        volumes:
+            - ./packages/api-main/src:/var/www/app/src
+            - ./data/api-main/node_modules:/var/www/app/node_modules
+            - ./data/api-main/emails:/var/www/app/emails
+            - ./packages/api-main/package.json:/var/www/app/package.json
+            - ./packages/api-main/yarn.lock:/var/www/app/yarn.lock
+            - ./packages/api-main/.env.defaults:/var/www/app/.env.defaults

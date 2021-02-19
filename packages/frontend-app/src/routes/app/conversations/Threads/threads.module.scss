@@ -1,0 +1,28 @@
+@import '../../../../styles/variables.module.scss';
+
+.threads {
+    width: 400px;
+    min-width: 400px;
+    max-width: 400px;
+    border-right: $defaultLine;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: $mainColor;
+}
+
+.title {
+    padding: 10px;
+    color: white;
+    font-size: 1.5em;
+}
+
+.threadList {
+    flex: 1;
+    overflow: auto;
+}
+
+.noConversations {
+    color: $white;
+    padding: 10px;
+}

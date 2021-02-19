@@ -1,0 +1,37 @@
+.header {
+    box-sizing: border-box;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1.2em;
+    display: flex;
+    flex-direction: row;
+    min-height: 65px;
+    color: white;
+    justify-content: space-between;
+}
+
+.header > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.backCursor,
+.close {
+    padding-left: 15px;
+    padding-right: 15px;
+    cursor: pointer;
+}
+
+.backCursor {
+    margin-right: 10px;
+}
+
+.close {
+    font-size: 1.4em;
+}
+
+.backCursor:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}

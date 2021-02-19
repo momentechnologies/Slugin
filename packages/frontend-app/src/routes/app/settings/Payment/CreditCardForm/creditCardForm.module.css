@@ -1,0 +1,61 @@
+.creditCardForm {
+    max-width: 450px;
+    position: relative;
+}
+
+.cardBlock {
+    background-color: #f8f8f8;
+    border: 1px solid #bbbbbb;
+    border-radius: 2px;
+    padding: 15px;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.lock {
+    color: #257b99;
+}
+
+.cardNumber {
+    max-width: 300px;
+}
+
+.cardOtherInfo {
+    display: flex;
+    margin-top: 10px;
+}
+
+.cardOtherInfo > div {
+    width: 120px;
+}
+
+.input {
+    margin-top: 0 !important;
+}
+
+.cardOtherInfo > div:last-child {
+    margin-left: 10px;
+}
+
+.spinner {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+}
+
+.error {
+    margin-top: 10px;
+}
+
+.input {
+    padding: 10px 17px;
+    border: 2px solid #dddddd;
+    border-radius: 2px;
+    outline: none;
+    font-size: 1.2em;
+    width: 100%;
+    font-family: inherit;
+}

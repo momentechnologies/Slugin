@@ -1,0 +1,33 @@
+.conversationLine {
+    display: flex;
+    padding: 5px;
+}
+
+.conversationLine.fromMe {
+    justify-content: flex-end;
+}
+
+.conversationLine:not(.fromMe) {
+    justify-content: flex-start;
+}
+
+.conversationLine > div {
+    padding: 15px 15px;
+    border-radius: 5px;
+    word-break: break-word;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    max-width: 80%;
+}
+
+.conversationLine:not(.fromMe) > div {
+    background-color: #4e4e4e;
+    color: white;
+}
+
+.conversationLine:last-child {
+    margin-bottom: 90px;
+}
+
+.conversationLine a {
+    color: inherit;
+}

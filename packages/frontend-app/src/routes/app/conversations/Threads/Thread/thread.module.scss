@@ -1,0 +1,26 @@
+@import '../../../../../styles/variables.module.scss';
+
+.thread {
+    cursor: pointer;
+    margin-bottom: 1px;
+}
+
+.thread-new {
+    background-color: $yellow;
+}
+
+.thread-ongoing {
+    background-color: $white;
+}
+
+.thread-done {
+    background-color: $red;
+}
+
+.lastMessage {
+    font-style: italic;
+    font-weight: lighter;
+    font-size: 0.8em;
+    color: #888888;
+    word-break: break-word;
+}

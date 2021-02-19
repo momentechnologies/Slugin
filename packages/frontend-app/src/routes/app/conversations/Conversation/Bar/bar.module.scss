@@ -1,0 +1,21 @@
+@import '../../../../../styles/variables.module';
+
+.actionBar {
+    border-bottom: $defaultLine;
+    padding: 20px;
+}
+
+.name {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.email {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}

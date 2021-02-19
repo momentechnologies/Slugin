@@ -1,0 +1,29 @@
+@import '../../styles/variables.module.scss';
+
+.header {
+    background-color: $mainColor;
+    color: $white;
+    text-align: center;
+    padding: 15px;
+    z-index: 1;
+    position: relative;
+    box-shadow: -30px 15px 60px rgba(0, 0, 0, 0.1);
+}
+
+.link {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 40px;
+    font-size: 1.5em;
+}
+
+.link a {
+    color: inherit;
+    text-decoration: none;
+    max-height: 100%;
+}
+
+.header > * {
+    flex: 1;
+}

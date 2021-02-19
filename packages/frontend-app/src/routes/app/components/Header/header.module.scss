@@ -1,0 +1,38 @@
+@import '../../../../styles/variables.module.scss';
+
+.page {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 80px;
+    background-color: $mainColor;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.icon {
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.linkIcon {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+}
+
+.links {
+    border-top: 1px solid white;
+    padding: 10px 0;
+}
+
+.content {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+}

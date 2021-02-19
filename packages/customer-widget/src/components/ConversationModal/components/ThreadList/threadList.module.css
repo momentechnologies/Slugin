@@ -1,0 +1,39 @@
+.threadListContainer {
+    flex: 1;
+    overflow: auto;
+}
+
+.buttonContainer {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.listItem {
+    padding: 20px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #b8b8b8;
+}
+
+.padding {
+    padding: 50px;
+}
+
+.listItem:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.listItemMeta {
+    font-style: italic;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.lastMessage {
+    word-break: break-word;
+}

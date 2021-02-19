@@ -1,0 +1,44 @@
+.conversationLine {
+    display: flex;
+    padding: 5px;
+}
+
+.conversationLine.fromClient {
+    justify-content: flex-start;
+}
+
+.conversationLine:not(.fromClient) {
+    justify-content: flex-end;
+}
+
+.messageContainer {
+    position: relative;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    max-width: 70%;
+    word-break: break-all;
+    padding: 15px;
+    border-radius: 25px;
+}
+
+.conversationLine.fromClient > .messageContainer {
+    background-color: #4e4e4e;
+    color: white;
+}
+
+.dot {
+    position: absolute;
+    bottom: 2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.conversationLine.fromClient .dot {
+    background-color: #4e4e4e;
+    left: 2px;
+}
+
+.conversationLine:not(.fromClient) .dot {
+    background-color: white;
+    right: 2px;
+}

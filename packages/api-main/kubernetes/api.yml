@@ -1,0 +1,118 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+    name: ${PROJECT_NAME}-ingress
+    namespace: web
+    annotations:
+        kubernetes.io/ingress.class: 'nginx'
+        nginx.ingress.kubernetes.io/affinity: 'cookie'
+        nginx.ingress.kubernetes.io/session-cookie-name: 'route'
+        nginx.ingress.kubernetes.io/session-cookie-hash: 'sha1'
+        certmanager.k8s.io/cluster-issuer: 'letsencrypt-prod'
+spec:
+    tls:
+        - hosts:
+              - api.slugin.io
+          secretName: api-slugin-tls
+    rules:
+        - host: api.slugin.io
+          http:
+              paths:
+                  - path: /
+                    backend:
+                        serviceName: ${PROJECT_NAME}
+                        servicePort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+    name: ${PROJECT_NAME}
+    namespace: web
+spec:
+    selector:
+        app: ${PROJECT_NAME}
+    ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 3000
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+    name: ${PROJECT_NAME}
+    namespace: web
+    labels:
+        app: ${PROJECT_NAME}
+spec:
+    replicas: 2
+    serviceName: ${PROJECT_NAME}
+    selector:
+        matchLabels:
+            app: ${PROJECT_NAME}
+    template:
+        metadata:
+            labels:
+                app: ${PROJECT_NAME}
+        spec:
+            containers:
+                - name: ${PROJECT_NAME}
+                  image: eu.gcr.io/${GOOGLE_PROJECT_ID}/${PROJECT_NAME}:${CIRCLE_SHA1}
+                  volumeMounts:
+                      - name: pubsub-credentials
+                        mountPath: /secrets/pubsub
+                        readOnly: true
+                  env:
+                      - name: NODE_ENV
+                        value: 'production'
+                      - name: CONFIG_APP_URL
+                        value: 'https://www.slugin.io'
+                      - name: CONFIG_APP_PORT
+                        value: '3000'
+                      - name: CONFIG_JWT_SECRET
+                        value: 'must be changed'
+                      - name: CONFIG_DB_USER
+                        valueFrom:
+                            secretKeyRef:
+                                name: cloudsql-db-credentials
+                                key: user
+                      - name: CONFIG_DB_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: cloudsql-db-credentials
+                                key: password
+                  ports:
+                      - name: http
+                        containerPort: 3000
+                        protocol: TCP
+                  livenessProbe:
+                      httpGet:
+                          path: /healthz
+                          port: 3000
+                          httpHeaders:
+                              - name: X-HEALTHZ
+                                value: Not in use yet
+                      initialDelaySeconds: 3
+                      periodSeconds: 3
+                - name: cloudsql-proxy
+                  image: gcr.io/cloudsql-docker/gce-proxy:1.11
+                  command:
+                      [
+                          '/cloud_sql_proxy',
+                          '-instances=slugin:europe-north1:slugin-db-1=tcp:5432',
+                          '-credential_file=/secrets/cloudsql/credentials.json',
+                      ]
+                  securityContext:
+                      runAsUser: 2 # non-root user
+                      allowPrivilegeEscalation: false
+                  volumeMounts:
+                      - name: cloudsql-instance-credentials
+                        mountPath: /secrets/cloudsql
+                        readOnly: true
+
+            volumes:
+                - name: cloudsql-instance-credentials
+                  secret:
+                      secretName: cloudsql-instance-credentials
+                - name: pubsub-credentials
+                  secret:
+                      secretName: pubsub-credentials

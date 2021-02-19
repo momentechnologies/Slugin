@@ -1,0 +1,10 @@
+@import '../../../styles/variables.module.scss';
+
+.conversations {
+    display: flex;
+    height: 100%;
+}
+
+.conversations > .conversation {
+    flex: 1;
+}

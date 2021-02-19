@@ -1,0 +1,14 @@
+@import '../../../../../styles/variables.module.scss';
+
+.reply {
+    cursor: pointer;
+    margin-bottom: 1px;
+    background-color: $white;
+}
+
+.replyText {
+    font-style: italic;
+    font-weight: lighter;
+    font-size: 0.8em;
+    color: #888888;
+}

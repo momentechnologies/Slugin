@@ -1,0 +1,80 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+    name: slugin-cron-{{scriptNameLowerCase}}
+    namespace: web
+spec:
+    schedule: '{{schedule}}'
+    concurrencyPolicy: Forbid
+    jobTemplate:
+        spec:
+            backoffLimit: 1
+            template:
+                spec:
+                    restartPolicy: Never
+                    containers:
+                        - name: slugin-cron-{{scriptNameLowerCase}}
+                          image: ${DOCKER_IMAGE}
+                          command: ['/bin/sh', '-c']
+                          volumeMounts:
+                              - name: pubsub-credentials
+                                mountPath: /secrets/pubsub
+                                readOnly: true
+                              - mountPath: /tmp/pod
+                                name: tmp-pod
+                          args:
+                              - |
+                                  trap "touch /tmp/pod/main-terminated" EXIT
+                                  node ./api/cronTasks {{scriptName}}
+                          env:
+                              - name: NODE_ENV
+                                value: 'production'
+                              - name: CONFIG_DB_USER
+                                valueFrom:
+                                    secretKeyRef:
+                                        name: cloudsql-db-credentials
+                                        key: user
+                              - name: CONFIG_DB_PASSWORD
+                                valueFrom:
+                                    secretKeyRef:
+                                        name: cloudsql-db-credentials
+                                        key: password
+                          ports:
+                              - name: http
+                                containerPort: 3000
+                                protocol: TCP
+                        - name: cloudsql-proxy
+                          image: gcr.io/cloudsql-docker/gce-proxy:1.11
+                          command: ['/bin/sh', '-c']
+                          args:
+                              - |
+                                  /cloud_sql_proxy --dir=/cloudsql -instances=slugin:europe-north1:slugin-db-1=tcp:5432 -credential_file=/secrets/cloudsql/credentials.json &
+                                  echo $!
+                                  echo $! > /tmp/process.pid
+                                  CHILD_PID=$!
+                                  (while true; do if [[ -f "/tmp/pod/main-terminated" ]]; then kill -9 `cat /tmp/process.pid`; echo "Killed $CHILD_PID as the main container terminated."; fi; sleep 1; done) &
+                                  wait `cat /tmp/process.pid`
+                                  if [[ -f "/tmp/pod/main-terminated" ]]; then exit 0; echo "Job completed. Exiting..."; fi
+                          securityContext:
+                              runAsUser: 2 # non-root user
+                              allowPrivilegeEscalation: false
+                          volumeMounts:
+                              - name: cloudsql-instance-credentials
+                                mountPath: /secrets/cloudsql
+                                readOnly: true
+                              - name: cloudsql
+                                mountPath: /cloudsql
+                              - mountPath: /tmp/pod
+                                name: tmp-pod
+                                readOnly: true
+                    volumes:
+                        - name: tmp-pod
+                          emptyDir: {}
+                        - name: cloudsql
+                          emptyDir:
+                        - name: cloudsql-instance-credentials
+                          secret:
+                              secretName: cloudsql-instance-credentials
+                        - name: pubsub-credentials
+                          secret:
+                              secretName: pubsub-credentials

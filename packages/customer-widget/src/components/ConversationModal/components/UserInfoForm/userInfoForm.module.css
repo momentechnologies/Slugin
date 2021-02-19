@@ -1,0 +1,27 @@
+.wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.form {
+    flex: 1;
+    padding: 10px;
+}
+.form * {
+    box-sizing: border-box;
+}
+
+.inputGroup input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.buttonContainer {
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}

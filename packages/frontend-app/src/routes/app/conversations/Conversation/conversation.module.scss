@@ -1,0 +1,30 @@
+@import '../../../../styles/variables.module.scss';
+
+.conversationWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.conversation {
+    flex: 1;
+    display: flex;
+}
+
+.messagesWrapper {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.messages {
+    flex: 1;
+    padding: 10px;
+    overflow: auto;
+}
+
+.messages > *:last-child {
+    margin-bottom: 110px;
+}

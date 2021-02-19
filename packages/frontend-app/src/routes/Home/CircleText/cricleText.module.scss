@@ -1,0 +1,24 @@
+@import '../../../styles/variables.module.scss';
+
+.circleText {
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 100%;
+}
+
+.circleText > div {
+    display: flex;
+    justify-content: center;
+}
+
+.white {
+    background-color: $white;
+    color: $mainColor;
+}
+
+.yellow {
+    background-color: $yellow;
+    color: $mainColor;
+}

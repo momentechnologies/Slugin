@@ -1,0 +1,64 @@
+@import '../../../styles/variables.module.scss';
+
+.bubble {
+    position: relative;
+    box-shadow: -50px 50px 80px rgba(0, 0, 0, 0.25);
+    border-radius: 230px;
+    padding: 50px 70px;
+    z-index: 1;
+}
+
+.triangle {
+    position: absolute;
+    bottom: -40px;
+    width: 0;
+    height: 0;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+}
+
+.triangle:not(.inverse) {
+    left: calc(50% - 100px);
+    transform: rotate(-225deg);
+}
+
+.inverse {
+    right: calc(50% - 100px);
+    transform: rotate(-135deg);
+}
+
+.red {
+    border: 25px solid $red;
+}
+
+.red .triangle {
+    border-top: 40px solid $red;
+}
+
+.darkGreen {
+    border: 25px solid #31422f;
+    color: #31422f;
+}
+
+.darkGreen .triangle {
+    border-top: 40px solid #31422f;
+}
+
+.darkGreenFilled {
+    border: 25px solid #31422f;
+    background-color: #31422f;
+    color: $white;
+}
+
+.darkGreenFilled .triangle {
+    border-top: 40px solid #31422f;
+}
+
+.white {
+    border: 25px solid $white;
+    color: $white;
+}
+
+.white .triangle {
+    border-top: 40px solid $white;
+}

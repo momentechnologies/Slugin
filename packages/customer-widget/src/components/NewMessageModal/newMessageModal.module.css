@@ -1,0 +1,21 @@
+.newMessageModal {
+    background: #ededed;
+    height: 100%;
+    border-radius: 10px;
+    border: 1px solid gray;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 5px 15px;
+}
+
+.close {
+    cursor: pointer;
+}
+
+.message {
+    padding: 0 10px 10px 10px;
+}

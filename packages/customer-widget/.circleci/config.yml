@@ -1,0 +1,79 @@
+version: 2
+jobs:
+    build:
+        docker:
+            - image: circleci/node:10
+        working_directory: ~/repo
+        steps:
+            - checkout
+            # Download and cache dependencies
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "package.json" }}
+                      # fallback to using the latest cache if no exact match is found
+                      - v1-dependencies-
+            - run: yarn install
+            - run:
+                  command: yarn build
+                  environment:
+                      REACT_APP_API_URL: https://api.slugin.io
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-{{ checksum "package.json" }}
+            - persist_to_workspace:
+                  root: .
+                  paths:
+                      - build
+    deploy_to_prod:
+        docker:
+            - image: google/cloud-sdk
+        environment:
+            - PROJECT_NAME: 'customer-widget'
+            - NAMESPACE: 'web'
+            - GOOGLE_PROJECT_ID: 'slugin'
+            - GOOGLE_COMPUTE_ZONE: 'europe-north1-a'
+            - GOOGLE_CLUSTER_NAME: 'slugin-1'
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: .
+            - run:
+                  name: Setup Google Cloud SDK
+                  command: |
+                      apt-get install -qq -y gettext
+                      echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+                      gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+                      gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+                      gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+                      gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
+            - setup_remote_docker
+            - run:
+                  name: Docker build and push
+                  command: |
+                      docker build \
+                        -t ${PROJECT_NAME} .
+                      docker tag ${PROJECT_NAME} eu.gcr.io/${GOOGLE_PROJECT_ID}/${PROJECT_NAME}:${CIRCLE_SHA1}
+                      gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
+                      docker push eu.gcr.io/${GOOGLE_PROJECT_ID}/${PROJECT_NAME}:${CIRCLE_SHA1}
+            - run:
+                  name: Deploy to Kubernetes
+                  command: |
+                      envsubst < ${HOME}/project/config/k8s.yml > ${HOME}/patched_k8s.yml
+                      kubectl apply -f ${HOME}/patched_k8s.yml
+                      kubectl rollout status deployment/${PROJECT_NAME} --namespace ${NAMESPACE}
+
+workflows:
+    version: 2
+    build_deploy:
+        jobs:
+            - build:
+                  filters:
+                      branches:
+                          only: master
+            - deploy_to_prod:
+                  requires:
+                      - build
+                  filters:
+                      branches:
+                          only: master

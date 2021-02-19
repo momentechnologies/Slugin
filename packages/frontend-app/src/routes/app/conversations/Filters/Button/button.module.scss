@@ -1,0 +1,33 @@
+@import '../../../../../styles/variables.module.scss';
+
+.button {
+    text-align: center;
+    border: 2px solid $white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.button.selected {
+    background-color: $white;
+    color: $mainColor;
+}
+
+.button-yellow {
+    border-color: $yellow;
+    color: $yellow;
+}
+
+.button-yellow.selected {
+    background-color: $yellow;
+    color: $mainColor;
+}
+
+.button-red {
+    border-color: $red;
+    color: $red;
+}
+
+.button-red.selected {
+    background-color: $red;
+    color: $mainColor;
+}

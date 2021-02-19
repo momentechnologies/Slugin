@@ -1,0 +1,11 @@
+@import '../../styles/variables.module.scss';
+
+.footer {
+    background-color: $mainColor;
+    color: $white;
+    text-align: center;
+    padding: 15px;
+    z-index: 1;
+    position: relative;
+    box-shadow: -30px 15px 60px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,19 @@
+@import '../../styles/variables.module.scss';
+
+.homeWrapper {
+    background-color: $mainColor;
+    padding-bottom: 150px;
+}
+
+.home {
+    position: relative;
+    min-height: 100vh;
+    z-index: 1;
+    color: $white;
+}
+
+.slogan {
+    font-size: 42px;
+    text-transform: uppercase;
+    line-height: normal;
+}

@@ -1,0 +1,10 @@
+@import '../../../styles/variables.module.scss';
+
+.repliesWrapper {
+    display: flex;
+    height: 100%;
+}
+
+.repliesWrapper > .reply {
+    flex: 1;
+}
