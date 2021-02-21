@@ -13,9 +13,6 @@
         "devdb:migrate": "sequelize db:migrate",
         "devdb:migration:undo": "sequelize db:migrate:undo",
         "devdb:seed": "sequelize db:seed:all",
-        "sql:proxy:prod:setup:mac": "rm -f cloud_sql_proxy && curl -o cloud_sql_proxy https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.386 && chmod +x cloud_sql_proxy",
-        "sql:proxy:prod": "./cloud_sql_proxy -instances=slugin:europe-north1:slugin-db-1=tcp:5434",
-        "gcloud:login": "gcloud auth login && gcloud container clusters get-credentials slugin-1 --zone europe-north1-a --project slugin",
         "cronTasks:readEmails": "PUBSUB_EMULATOR_HOST=localhost:8085 node api/cronTasks readEmails",
         "cronTasks:checkNonReadThreads": "PUBSUB_EMULATOR_HOST=localhost:8085 node api/cronTasks checkNonReadThreads"
     },
