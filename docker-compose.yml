@@ -49,8 +49,9 @@ services:
             PUBSUB_EMULATOR_HOST: pubsub:8538
             REDIS_URL: redis://redis
             JWT_SECRET: 'a secret for dev'
+            CONFIG_DB_HOST: 'postgres'
         volumes:
-            - ./packages/api-main/src:/var/www/app/src
+            - ./packages/api-main/api:/var/www/app/api
             - ./data/api-main/node_modules:/var/www/app/node_modules
             - ./data/api-main/emails:/var/www/app/emails
             - ./packages/api-main/package.json:/var/www/app/package.json

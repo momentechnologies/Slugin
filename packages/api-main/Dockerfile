@@ -7,6 +7,7 @@ WORKDIR /var/www/app
 COPY . .
 
 RUN yarn install
+RUN npm i -g sequelize-cli
 
 # Run any other build steps such as `npm run build`
 ENV APP_COMMIT_REF=${COMMIT_REF} \
@@ -14,4 +15,4 @@ ENV APP_COMMIT_REF=${COMMIT_REF} \
 
 EXPOSE 80
 
-CMD [ "bash", "-c", "yarn; yarn start:dev" ]
+CMD [ "bash", "-c", "yarn; yarn devdb:migrate; yarn start:dev" ]

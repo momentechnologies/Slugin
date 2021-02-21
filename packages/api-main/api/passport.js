@@ -13,9 +13,9 @@ passport.use(
             usernameField: 'email',
             passwordField: 'password',
         },
-        function(email, password, cb) {
+        function (email, password, cb) {
             return UserRepository.getByEmail(validator.normalizeEmail(email))
-                .then(user => {
+                .then((user) => {
                     if (!user || !bcrypt.compareSync(password, user.password)) {
                         return cb(null, false, {
                             message: 'Incorrect email or password.',
@@ -28,7 +28,7 @@ passport.use(
                         message: 'Logged In Successfully',
                     });
                 })
-                .catch(err => {
+                .catch((err) => {
                     return cb(err);
                 });
         }
@@ -38,7 +38,7 @@ passport.use(
 passport.use(
     new JWTStrategy(
         {
-            jwtFromRequest: req => {
+            jwtFromRequest: (req) => {
                 if (!req) {
                     return null;
                 }
@@ -55,7 +55,7 @@ passport.use(
             },
             secretOrKey: jwtConfig.secret,
         },
-        function(jwtPayload, cb) {
+        function (jwtPayload, cb) {
             return cb(null, jwtPayload.payload.user);
         }
     )
