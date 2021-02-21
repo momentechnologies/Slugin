@@ -1,5 +1,5 @@
 {
-    "name": "bonde-backend",
+    "name": "api-main",
     "version": "1.0.0",
     "author": {
         "name": "Max Moeschinger",
@@ -8,10 +8,8 @@
     },
     "license": "MIT",
     "scripts": {
-        "start:dev": "PUBSUB_EMULATOR_HOST=localhost:8085 concurrently --kill-others \"npm run db\" \"npm run dev:server\"",
+        "start:dev": "nodemon server.js",
         "start": "node server.js",
-        "dev:server": "wait-on tcp:5432 && nodemon server.js",
-        "db": "docker run --rm --name=devdb --env POSTGRES_PASSWORD=postgres --env POSTGRES_USER=postgres --publish 5432:5432 -v `pwd`/pgdata:/var/lib/postgresql/data -v `pwd`/scripts/init-slugin-db.sh:/docker-entrypoint-initdb.d/init-slugin-db.sh postgres:11-alpine",
         "devdb:migrate": "sequelize db:migrate",
         "devdb:migration:undo": "sequelize db:migrate:undo",
         "devdb:seed": "sequelize db:seed:all",

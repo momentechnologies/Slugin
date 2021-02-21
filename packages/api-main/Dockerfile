@@ -12,6 +12,6 @@ RUN yarn install
 ENV APP_COMMIT_REF=${COMMIT_REF} \
     APP_BUILD_DATE=${BUILD_DATE}
 
-EXPOSE 3000
+EXPOSE 80
 
-CMD [ "yarn", "start" ]
+CMD [ "bash", "-c", "yarn; yarn start:dev" ]

@@ -7,7 +7,7 @@ services:
             POSTGRES_PASSWORD: postgres
         volumes:
             - ./data/postgres:/var/lib/postgresql/data
-            - ./postgres.sql:/docker-entrypoint-initdb.d/init-db.sql
+            - ./docker/postgresinit.d:/docker-entrypoint-initdb.d
         ports:
             - '5432:5432'
 
@@ -17,12 +17,13 @@ services:
     proxy:
         image: nginx:alpine
         volumes:
-            - ./proxy.nginx.d:/etc/nginx/conf.d
+            - ./docker/proxy.nginx.d:/etc/nginx/conf.d:ro
             - ./data/proxy/cache:/data/nginx/cache
             - ./data/https/ca:/etc/ca
             - ./data/https/certs:/etc/ssl/private
         ports:
             - '80:80'
+            - '443:443'
 
     frontend-app:
         build:
@@ -31,7 +32,7 @@ services:
             target: dev
         environment:
             REACT_APP_API_URL: http://localhost:5000
-            REACT_APP_SUBSCRIPTION_API_URL: ws://localhost:5000
+            REACT_APP_SUBSCRIPTION_API_URL: wss://localhost:5000
         volumes:
             - ./data/frontend-app/node_modules:/var/www/app/node_modules
             - ./packages/frontend-app/public:/var/www/app/public
@@ -39,7 +40,7 @@ services:
             - ./packages/frontend-app/package.json:/var/www/app/package.json
             - ./packages/frontend-app/yarn.lock:/var/www/app/yarn.lock
 
-    api:
+    api-main:
         build:
             context: packages/api-main
             dockerfile: Dockerfile
@@ -47,6 +48,7 @@ services:
             LOG_REQUESTS: '0'
             PUBSUB_EMULATOR_HOST: pubsub:8538
             REDIS_URL: redis://redis
+            JWT_SECRET: 'a secret for dev'
         volumes:
             - ./packages/api-main/src:/var/www/app/src
             - ./data/api-main/node_modules:/var/www/app/node_modules

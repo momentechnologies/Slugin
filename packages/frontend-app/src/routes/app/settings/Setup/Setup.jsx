@@ -6,7 +6,7 @@ import MeHoc from '../../../../hComponents/Me';
 import styles from './setup.module.scss';
 
 const Content = ({ selectedOrganization }) => (
-    <React.Fragment>
+    <>
         <Row>
             <Col>
                 <h2>Add html code below</h2>
@@ -42,7 +42,7 @@ const Content = ({ selectedOrganization }) => (
                 </p>
             </Col>
         </Row>
-    </React.Fragment>
+    </>
 );
 
 const Setup = ({ withContainer = true, ...props }) =>

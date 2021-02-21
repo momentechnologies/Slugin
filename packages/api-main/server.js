@@ -16,7 +16,7 @@ require('./api/passport');
 
 socketSetup();
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.get('origin'));
     res.header(
